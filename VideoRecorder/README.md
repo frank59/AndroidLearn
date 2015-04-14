@@ -1,3 +1,6 @@
+# 作者原版的地址是：[https://github.com/qdrzwd/VideoRecorder](https://github.com/qdrzwd/VideoRecorder)
+此代码只做学习之用!
+
 VideoRecorder
 =============
 
