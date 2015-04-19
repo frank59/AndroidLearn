@@ -19,7 +19,7 @@ public class VideoPlayTextureView extends TextureView implements
 	private Surface surface;
 	private MediaStateLitenser mediaStateLitenser;
 	private MediaState currentMediaState = MediaState.RESET;
-	private boolean isChange = true;//µ±¼ÓÔØÍêÊÓÆµÎÄ¼şÊ±£¬ÅĞ¶Ïµ±Ç°SurfaceViewÊÇ·ñ»¹ÊÇÖ®Ç°µÄSurfaceView
+	private boolean isChange = true;//å½“åŠ è½½å®Œè§†é¢‘æ–‡ä»¶æ—¶ï¼Œåˆ¤æ–­å½“å‰SurfaceViewæ˜¯å¦è¿˜æ˜¯ä¹‹å‰çš„SurfaceView
 	
 	public void setChange(boolean change){
 		isChange = change;
@@ -46,7 +46,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ³õÊ¼»¯Êı¾İ
+	 * åˆå§‹åŒ–æ•°æ®
 	 * @param context
 	 */
 	private void init(Context context) {
@@ -62,7 +62,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ²¥·Åµ±Ç°µÄÊÓÆµ£¬Èç¹ûÒÑ¾­ÔÚ²¥·ÅÔòÔİÍ££¬·ñÔò¶¼¿ªÊ¼²¥·Å
+	 * æ’­æ”¾å½“å‰çš„è§†é¢‘ï¼Œå¦‚æœå·²ç»åœ¨æ’­æ”¾åˆ™æš‚åœï¼Œå¦åˆ™éƒ½å¼€å§‹æ’­æ”¾
 	 */
 	public void play() {
 		if(currentMediaState ==  MediaState.PLAY){
@@ -81,7 +81,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ÔİÍ£²¥·Å
+	 * æš‚åœæ’­æ”¾
 	 */
 	public void pause() {
 		if (mediaPlayer != null && mediaPlayer.isPlaying()){
@@ -93,7 +93,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * Í£Ö¹²¥·Å£¬ÔİÊ±Ã»Ê¹ÓÃ
+	 * åœæ­¢æ’­æ”¾ï¼Œæš‚æ—¶æ²¡ä½¿ç”¨
 	 */
 	public void stop() {
 		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
@@ -104,7 +104,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 	
 	/**
-	 * ÖØÖÃµ±Ç°mediaPlyer£¬ÔÚlistViewÖØÓÃ¸Ã¿Ø¼şÊ±µ÷ÓÃ
+	 * é‡ç½®å½“å‰mediaPlyerï¼Œåœ¨listViewé‡ç”¨è¯¥æ§ä»¶æ—¶è°ƒç”¨
 	 */
 	public void reset(){
 		currentMediaState = MediaState.RESET;
@@ -112,8 +112,8 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ×¼±¸²¥·ÅÖ®Ç°¶î×¼±¸¶¯×÷£¬Í¬²½µ÷ÓÃ£¬ÊÊºÏÓÚÎÄ¼ş
-	 * Èç¹ûÊÇÁ÷£¬µ÷ÓÃasyncPrepare()
+	 * å‡†å¤‡æ’­æ”¾ä¹‹å‰é¢å‡†å¤‡åŠ¨ä½œï¼ŒåŒæ­¥è°ƒç”¨ï¼Œé€‚åˆäºæ–‡ä»¶
+	 * å¦‚æœæ˜¯æµï¼Œè°ƒç”¨asyncPrepare()
 	 * @param path
 	 */
 	public void prepare(String path) {
@@ -154,7 +154,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ÉèÖÃ²¥·Å×´Ì¬µÄ¼àÌı
+	 * è®¾ç½®æ’­æ”¾çŠ¶æ€çš„ç›‘å¬
 	 * @param mediaStateLitenser
 	 */
 	public void setMediaStateLitenser(MediaStateLitenser mediaStateLitenser) {
@@ -162,7 +162,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 
 	/**
-	 * ²¥·Å×´Ì¬
+	 * æ’­æ”¾çŠ¶æ€
 	 * @author QD
 	 *
 	 */
@@ -189,7 +189,7 @@ public class VideoPlayTextureView extends TextureView implements
 	}
 	
 	/**
-	 * ¿ªÊ¼ÊÓÆµÎÄ¼şÏÂÔØÊÓµ÷ÓÃ
+	 * å¼€å§‹è§†é¢‘æ–‡ä»¶ä¸‹è½½è§†è°ƒç”¨
 	 */
 	public void OnDownLoadingListener(){
 		if (mediaStateLitenser != null)

@@ -32,11 +32,11 @@ public class ProgressView extends View
 		init(paramContext);
 	}
 
-	private Paint progressPaint, firstPaint, threePaint,breakPaint;//Èı¸öÑÕÉ«µÄ»­±Ê
-	private float firstWidth = 4f, threeWidth = 1f;//¶ÏµãµÄ¿í¶È
+	private Paint progressPaint, firstPaint, threePaint,breakPaint;//ä¸‰ä¸ªé¢œè‰²çš„ç”»ç¬”
+	private float firstWidth = 4f, threeWidth = 1f;//æ–­ç‚¹çš„å®½åº¦
 	private LinkedList<Integer> linkedList = new LinkedList<Integer>();
 	private float perPixel = 0l;
-	private float countRecorderTime = 8000;//×ÜµÄÂ¼ÖÆÊ±¼ä
+	private float countRecorderTime = 8000;//æ€»çš„å½•åˆ¶æ—¶é—´
 	
 	public void setTotalTime(float time){
 		countRecorderTime = time;
@@ -49,18 +49,18 @@ public class ProgressView extends View
 		threePaint = new Paint();
 		breakPaint = new Paint();
 
-		// ±³¾°
+		// èƒŒæ™¯
 		setBackgroundColor(Color.parseColor("#19000000"));
 
-		// Ö÷Òª½ø¶ÈµÄÑÕÉ«
+		// ä¸»è¦è¿›åº¦çš„é¢œè‰²
 		progressPaint.setStyle(Paint.Style.FILL);
 		progressPaint.setColor(Color.parseColor("#19e3cf"));
 
-		// Ò»ÉÁÒ»ÉÁµÄ»ÆÉ«½ø¶È
+		// ä¸€é—ªä¸€é—ªçš„é»„è‰²è¿›åº¦
 		firstPaint.setStyle(Paint.Style.FILL);
 		firstPaint.setColor(Color.parseColor("#ffcc42"));
 
-		// 3Ãë´¦µÄ½ø¶È
+		// 3ç§’å¤„çš„è¿›åº¦
 		threePaint.setStyle(Paint.Style.FILL);
 		threePaint.setColor(Color.parseColor("#12a899"));
 		
@@ -76,7 +76,7 @@ public class ProgressView extends View
 	}
 	
 	/**
-	 * »æÖÆ×´Ì¬
+	 * ç»˜åˆ¶çŠ¶æ€
 	 * @author QD
 	 *
 	 */
@@ -104,44 +104,44 @@ public class ProgressView extends View
 	}
 	
 	
-	private volatile State currentState = State.PAUSE;//µ±Ç°×´Ì¬
-	private boolean isVisible = true;//Ò»ÉÁÒ»ÉÁµÄ»ÆÉ«ÇøÓòÊÇ·ñ¿É¼û
-	private float countWidth = 0;//Ã¿´Î»æÖÆÍê³É£¬½ø¶ÈÌõµÄ³¤¶È
-	private float perProgress = 0;//ÊÖÖ¸°´ÏÂÊ±£¬½ø¶ÈÌõÃ¿´ÎÔö³¤µÄ³¤¶È
-	private float perSecProgress = 0;//Ã¿ºÁÃë¶ÔÓ¦µÄÏñËØµã
-	private long initTime;//»æÖÆÍê³ÉÊ±µÄÊ±¼ä´Á
-	private long drawFlashTime = 0;//ÉÁ¶¯µÄ»ÆÉ«ÇøÓòÊ±¼ä´Á
+	private volatile State currentState = State.PAUSE;//å½“å‰çŠ¶æ€
+	private boolean isVisible = true;//ä¸€é—ªä¸€é—ªçš„é»„è‰²åŒºåŸŸæ˜¯å¦å¯è§
+	private float countWidth = 0;//æ¯æ¬¡ç»˜åˆ¶å®Œæˆï¼Œè¿›åº¦æ¡çš„é•¿åº¦
+	private float perProgress = 0;//æ‰‹æŒ‡æŒ‰ä¸‹æ—¶ï¼Œè¿›åº¦æ¡æ¯æ¬¡å¢é•¿çš„é•¿åº¦
+	private float perSecProgress = 0;//æ¯æ¯«ç§’å¯¹åº”çš„åƒç´ ç‚¹
+	private long initTime;//ç»˜åˆ¶å®Œæˆæ—¶çš„æ—¶é—´æˆ³
+	private long drawFlashTime = 0;//é—ªåŠ¨çš„é»„è‰²åŒºåŸŸæ—¶é—´æˆ³
 	
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		long curTime = System.currentTimeMillis();
 		//Log.i("recorder", curTime  - initTime + "");
 		countWidth = 0;
-		//Ã¿´Î»æÖÆ¶¼½«¶ÓÁĞÖĞµÄ¶ÏµãµÄÊ±¼äË³Ğò£¬»æÖÆ³öÀ´
+		//æ¯æ¬¡ç»˜åˆ¶éƒ½å°†é˜Ÿåˆ—ä¸­çš„æ–­ç‚¹çš„æ—¶é—´é¡ºåºï¼Œç»˜åˆ¶å‡ºæ¥
 		if(!linkedList.isEmpty()){
 			float frontTime = 0;
 			Iterator<Integer> iterator = linkedList.iterator();
 			while(iterator.hasNext()){
 				int time = iterator.next();
-				//Çó³ö±¾´Î»æÖÆ¾ØĞÎµÄÆğµãÎ»ÖÃ
+				//æ±‚å‡ºæœ¬æ¬¡ç»˜åˆ¶çŸ©å½¢çš„èµ·ç‚¹ä½ç½®
 				float left = countWidth;
-				//Çó³ö±¾´Î»æÖÆ¾ØĞÎµÄÖÕµãÎ»ÖÃ
+				//æ±‚å‡ºæœ¬æ¬¡ç»˜åˆ¶çŸ©å½¢çš„ç»ˆç‚¹ä½ç½®
 				countWidth += (time-frontTime)*perPixel;
-				//»æÖÆ½ø¶ÈÌõ
+				//ç»˜åˆ¶è¿›åº¦æ¡
 				canvas.drawRect(left, 0,countWidth,getMeasuredHeight(),progressPaint);
-				//»æÖÆ¶Ïµã
+				//ç»˜åˆ¶æ–­ç‚¹
 				canvas.drawRect(countWidth, 0,countWidth + threeWidth,getMeasuredHeight(),breakPaint);
 				countWidth += threeWidth;
 				
 				frontTime = time;
 			}
-			//»æÖÆÈıÃë´¦µÄ¶Ïµã
+			//ç»˜åˆ¶ä¸‰ç§’å¤„çš„æ–­ç‚¹
 			 if(linkedList.getLast() <= 3000)
 				canvas.drawRect(perPixel*3000, 0,perPixel*3000+threeWidth,getMeasuredHeight(),threePaint);
-		}else//»æÖÆÈıÃë´¦µÄ¶Ïµã
-			canvas.drawRect(perPixel*3000, 0,perPixel*3000+threeWidth,getMeasuredHeight(),threePaint);//»æÖÆÈıÃë´¦µÄ¾ØĞÎ
+		}else//ç»˜åˆ¶ä¸‰ç§’å¤„çš„æ–­ç‚¹
+			canvas.drawRect(perPixel*3000, 0,perPixel*3000+threeWidth,getMeasuredHeight(),threePaint);//ç»˜åˆ¶ä¸‰ç§’å¤„çš„çŸ©å½¢
 		
-		//µ±ÊÖÖ¸°´×¡ÆÁÄ»Ê±£¬½ø¶ÈÌõ»áÔö³¤
+		//å½“æ‰‹æŒ‡æŒ‰ä½å±å¹•æ—¶ï¼Œè¿›åº¦æ¡ä¼šå¢é•¿
 		if(currentState == State.START){
 			perProgress += perSecProgress*(curTime - initTime );
 			if(countWidth + perProgress <= getMeasuredWidth())
@@ -149,7 +149,7 @@ public class ProgressView extends View
 			else
 				canvas.drawRect(countWidth, 0,getMeasuredWidth(),getMeasuredHeight(),progressPaint);
 		}
-		//»æÖÆÒ»ÉÁÒ»ÉÁµÄ»ÆÉ«ÇøÓò£¬Ã¿500msÉÁ¶¯Ò»´Î
+		//ç»˜åˆ¶ä¸€é—ªä¸€é—ªçš„é»„è‰²åŒºåŸŸï¼Œæ¯500msé—ªåŠ¨ä¸€æ¬¡
 		if(drawFlashTime==0 || curTime - drawFlashTime >= 500){
 			isVisible = !isVisible;
 			drawFlashTime = System.currentTimeMillis();
@@ -160,13 +160,13 @@ public class ProgressView extends View
 			else
 				canvas.drawRect(countWidth, 0,countWidth + firstWidth,getMeasuredHeight(),firstPaint);
 		}
-		//½áÊø»æÖÆÒ»ÉÁÒ»ÉÁµÄ»ÆÉ«ÇøÓò
+		//ç»“æŸç»˜åˆ¶ä¸€é—ªä¸€é—ªçš„é»„è‰²åŒºåŸŸ
 		initTime = System.currentTimeMillis();
 		invalidate();
 	}
 	
 	/**
-	 * ÉèÖÃ½ø¶ÈÌõµÄ×´Ì¬
+	 * è®¾ç½®è¿›åº¦æ¡çš„çŠ¶æ€
 	 * @param state
 	 */
 	public void setCurrentState(State state){
@@ -176,8 +176,8 @@ public class ProgressView extends View
 	}
 	
 	/**
-	 * ÊÖÖ¸Ì§ÆğÊ±£¬½«Ê±¼äµã±£´æµ½¶ÓÁĞÖĞ
-	 * @param time:msÎªµ¥Î»
+	 * æ‰‹æŒ‡æŠ¬èµ·æ—¶ï¼Œå°†æ—¶é—´ç‚¹ä¿å­˜åˆ°é˜Ÿåˆ—ä¸­
+	 * @param time:msä¸ºå•ä½
 	 */
 	public void putProgressList(int time) {
 		linkedList.add(time);
