@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-				Intent startRecoderIntent = new Intent(MainActivity.this, RecoderActivity.class);
+				Intent startRecoderIntent = new Intent(MainActivity.this, RecordVideoActivity.class);
 				startActivity(startRecoderIntent);
 			}
 		});
