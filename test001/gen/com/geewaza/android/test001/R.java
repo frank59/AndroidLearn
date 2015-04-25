@@ -21,14 +21,56 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int btn_darkgrey_bg=0x7f020000;
+        public static final int btn_darkgrey_bg_pressed=0x7f020001;
+        public static final int btn_dialog_normal=0x7f020002;
+        public static final int btn_lightgreen_bg=0x7f020003;
+        public static final int btn_lightgreen_bg_pressed=0x7f020004;
+        public static final int btn_recorder_cancel=0x7f020005;
+        public static final int btn_recorder_flashlight=0x7f020006;
+        public static final int btn_recorder_frontcamera=0x7f020007;
+        public static final int btn_recorder_next=0x7f020008;
+        public static final int btn_recorder_picture=0x7f020009;
+        public static final int btn_recorder_video=0x7f02000a;
+        public static final int btn_recorder_video_text=0x7f02000b;
+        public static final int button=0x7f02000c;
+        public static final int button_globaldialog=0x7f02000d;
+        public static final int button_status_color=0x7f02000e;
+        public static final int dialog_title_bar=0x7f02000f;
+        public static final int ic_launcher=0x7f020010;
+        public static final int icn_change_view=0x7f020011;
+        public static final int icn_change_view_pressed=0x7f020012;
+        public static final int icn_flashlight_off=0x7f020013;
+        public static final int icn_flashlight_on=0x7f020014;
+        public static final int icn_move=0x7f020015;
+        public static final int icn_move_pressed=0x7f020016;
+        public static final int icn_pic_choose=0x7f020017;
+        public static final int icn_pic_delete=0x7f020018;
+        public static final int icn_picture=0x7f020019;
+        public static final int icn_picture_pressed=0x7f02001a;
+        public static final int icn_play_big=0x7f02001b;
+        public static final int icn_play_small=0x7f02001c;
+        public static final int icn_save=0x7f02001d;
+        public static final int icn_save_pressed=0x7f02001e;
+        public static final int icn_video=0x7f02001f;
+        public static final int icn_video_pressed=0x7f020020;
+        public static final int icn_zoomin=0x7f020021;
+        public static final int icn_zoomin_pressed=0x7f020022;
+        public static final int recorder_success_progress=0x7f020023;
     }
     public static final class id {
-        public static final int action_settings=0x7f070007;
-        public static final int preView=0x7f070006;
-        public static final int recordStartButton=0x7f070004;
-        public static final int recordStopButton=0x7f070005;
+        public static final int action_settings=0x7f07000e;
+        public static final int preview=0x7f07000a;
         public static final int record_start_button=0x7f070000;
+        public static final int recorder_bottom_bar=0x7f07000b;
+        public static final int recorder_button_compress=0x7f07000d;
+        public static final int recorder_button_start=0x7f07000c;
+        public static final int recorder_flashlight=0x7f070006;
+        public static final int recorder_frontcamera=0x7f070007;
+        public static final int recorder_head_bar=0x7f070004;
+        public static final int recorder_preview_parent=0x7f070009;
+        public static final int recorder_progressbar=0x7f070008;
+        public static final int recorder_timer=0x7f070005;
         public static final int start=0x7f070002;
         public static final int stop=0x7f070003;
         public static final int videoView=0x7f070001;
@@ -45,6 +87,7 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
+        public static final int compress=0x7f050007;
         public static final int hello_world=0x7f050003;
         public static final int start=0x7f050005;
         public static final int start_recoder=0x7f050004;

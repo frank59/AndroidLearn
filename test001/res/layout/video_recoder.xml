@@ -1,34 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:gravity="center_horizontal">
-    
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+    <RelativeLayout 
+        android:id="@+id/recorder_head_bar"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         >
-        <Button 
-            android:id="@+id/recordStartButton"
+        <TextView 
+            android:id="@+id/recorder_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            />
+        <Button
+            android:id="@+id/recorder_flashlight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start"
-            />
-        <Button 
-            android:id="@+id/recordStopButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stop"
-            />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/btn_recorder_flashlight"
+            android:visibility="gone" />
         
-    </LinearLayout>
-    <SurfaceView 
-        android:id="@+id/preView"
+        <Button
+            android:id="@+id/recorder_frontcamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50dp"
+            android:layout_toLeftOf="@id/recorder_flashlight"
+            android:background="@drawable/btn_recorder_frontcamera"
+            android:visibility="gone" />
+    </RelativeLayout>
+    <ProgressBar 
+        android:id="@+id/recorder_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/recorder_head_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        />
+    <RelativeLayout
+        android:id="@+id/recorder_preview_parent"
+        android:layout_below="@id/recorder_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <SurfaceView 
+        android:id="@+id/preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         />
-
-</LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/recorder_bottom_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+        <Button 
+            android:id="@+id/recorder_button_start"
+            android:text="@string/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            />
+        <Button 
+            android:id="@+id/recorder_button_compress"
+            android:text="@string/compress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            />
+    </RelativeLayout>
+</RelativeLayout>

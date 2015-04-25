@@ -8,5 +8,6 @@
     <string name="start_recoder">启动录像机</string>
     <string name="start">开始</string>
     <string name="stop">停止</string>
+    <string name="compress">合并</string>
 
 </resources>
