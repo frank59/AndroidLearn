@@ -1,7 +1,10 @@
 package com.geewaza.android.test001;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -43,6 +46,8 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 	
 	String recordDirPath;
 	String outputDirPath;
+	String bgmDirPath;
+	String bgmFile;
 	
 	private boolean isRecording = false;
 	
@@ -69,6 +74,12 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 			if (!outputDir.exists() || !outputDir.isDirectory()) {
 				outputDir.mkdirs();
 			}
+			bgmDirPath = Environment.getExternalStorageDirectory().getCanonicalFile() + CONSTANTS.BGM_FILE_PATH_PATH;
+			File bgmDir = new File(bgmDirPath);
+			if (!bgmDir.exists() || !bgmDir.isDirectory()) {
+				bgmDir.mkdirs();
+			}
+			bgmFile = copyBGMFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -150,7 +161,7 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 			videoFileNames[i] = recordDirPath + "/" + videoFileNames[i];
 			System.out.println(videoFileNames[i]);
 		}
-		ShortenExample.appendVideo(outputFile, videoFileNames);
+		ShortenExample.appendVideo(outputFile, videoFileNames, bgmFile);
 	}
 
 	private void stopRecording() {
@@ -274,6 +285,25 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 		}
 		mRecorder.start();
 		
+	}
+	
+	private String copyBGMFile() throws IOException {
+		String outputFileName = bgmDirPath + "/sequence.aac";
+		File bgm = new File(outputFileName);
+		if (bgm.exists()) {
+			return outputFileName;
+		}
+		int len=-1;
+		byte[] bt = new byte[1024 * 50];
+		InputStream in = getResources().getAssets().open("sequence.aac");
+		OutputStream os = new FileOutputStream(outputFileName);
+		while( (len = in.read(bt)) != -1) {
+			os.write(bt,0,len); //建议不要直接用os.write(bt)
+		}
+		os.flush();
+		in.close();
+		os.close();
+		return outputFileName;
 	}
 	
 	static class ProgressTimer implements Runnable {

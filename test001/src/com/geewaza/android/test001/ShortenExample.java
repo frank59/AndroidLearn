@@ -7,10 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.coremedia.iso.boxes.Container;
+import com.googlecode.mp4parser.DataSource;
+import com.googlecode.mp4parser.FileDataSourceImpl;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
+import com.googlecode.mp4parser.authoring.tracks.AACTrackImpl;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 
 
@@ -39,7 +42,7 @@ import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
  */
 public class ShortenExample {
 
-	public static void appendVideo(String to , String[] videos) throws IOException{
+	public static void appendVideo(String to , String[] videos, String bgmFile) throws IOException{
         Movie[] inMovies = new Movie[videos.length];
         int index = 0;
         for(String video:videos)
@@ -49,10 +52,13 @@ public class ShortenExample {
     	}
         List<Track> videoTracks = new LinkedList<Track>();
         List<Track> audioTracks = new LinkedList<Track>();
+        DataSource dataSource = new FileDataSourceImpl(bgmFile);
+		AACTrackImpl aacTrackImpl = new AACTrackImpl(dataSource);
+		audioTracks.add(aacTrackImpl);
         for (Movie m : inMovies) {
             for (Track t : m.getTracks()) {
                 if (t.getHandler().equals("soun")) {
-                    audioTracks.add(t);
+//                    audioTracks.add(t);
                 }
                 if (t.getHandler().equals("vide")) {
                     videoTracks.add(t);
