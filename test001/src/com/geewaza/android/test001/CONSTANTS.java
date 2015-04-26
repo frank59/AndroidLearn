@@ -1,6 +1,6 @@
 package com.geewaza.android.test001;
 
-public class CONSTAND {
+public class CONSTANTS {
 	
 	public static final String RECORD_FILE_PATH = "/geewaza/record";
 	public static final String OUT_PUT_FILE_PATH = "/geewaza/output";

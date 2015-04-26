@@ -9,11 +9,15 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
+import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.media.MediaRecorder.OnInfoListener;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +37,7 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 	Button compressButton;
 	SurfaceView preView;
 	MediaRecorder mRecorder;
-	Camera c;
+	Camera mCamera;
 	ProgressBar progressBar;
 	ProgressTimer progressTimer;
 	
@@ -41,7 +45,6 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 	String outputDirPath;
 	
 	private boolean isRecording = false;
-	private File videoFile;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -56,12 +59,12 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 		progressBar.setMax(MAX_DURATING);
 		
 		try {
-			recordDirPath = Environment.getExternalStorageDirectory().getCanonicalFile() + CONSTAND.RECORD_FILE_PATH;
+			recordDirPath = Environment.getExternalStorageDirectory().getCanonicalFile() + CONSTANTS.RECORD_FILE_PATH;
 			File recordDir = new File(recordDirPath);
 			if (!recordDir.exists() || !recordDir.isDirectory()) {
 				recordDir.mkdirs();
 			}
-			outputDirPath = Environment.getExternalStorageDirectory().getCanonicalFile() + CONSTAND.OUT_PUT_FILE_PATH;
+			outputDirPath = Environment.getExternalStorageDirectory().getCanonicalFile() + CONSTANTS.OUT_PUT_FILE_PATH;
 			File outputDir = new File(outputDirPath);
 			if (!outputDir.exists() || !outputDir.isDirectory()) {
 				outputDir.mkdirs();
@@ -70,10 +73,25 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 			e.printStackTrace();
 		}
 		
-		
-		
 		startButton.setOnClickListener(this);
 		compressButton.setOnClickListener(this);
+		preView.getHolder().addCallback(new Callback() {
+			
+			@Override
+			public void surfaceDestroyed(SurfaceHolder arg0) {
+				releaseCamera();
+			}
+			
+			@Override
+			public void surfaceCreated(SurfaceHolder arg0) {
+				initpreview();
+			}
+			
+			@Override
+			public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
+				
+			}
+		});
 		startButton.setEnabled(true);
 		preView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		preView.getHolder().setFixedSize(800, 480);
@@ -87,46 +105,6 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 	private void resetProgressbar() {
 		progressBar.setProgress(0);
 	}
-	
-	public boolean prepareRecorder() throws IOException {
-		String fileName = dateFormat.format(Calendar.getInstance().getTime());
-		videoFile = new File(recordDirPath + "/" + fileName + ".mp4");
-		System.out.println(videoFile.getAbsolutePath());
-		Toast.makeText(RecordVideoActivity.this, videoFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
-		c = Camera.open();
-		c.getParameters().setPreviewSize(1024, 768);
-		c.setDisplayOrientation(90);
-//		c.setPreviewDisplay(preView.getHolder());
-		c.unlock();
-		mRecorder.reset();
-		mRecorder.setCamera(c);
-		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);//设置声音源
-		mRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);//设置视频源
-		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-		mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-		mRecorder.setVideoSize(1024, 768);
-		mRecorder.setOrientationHint(90);
-//		CamcorderProfile cProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH); 
-//		mRecorder.setProfile(cProfile);
-//		mRecorder.setVideoSize(320, 280);
-		mRecorder.setVideoEncodingBitRate(5 * 1024 * 768);//每秒4帧
-		mRecorder.setOutputFile(videoFile.getAbsolutePath());
-		mRecorder.setMaxDuration(MAX_DURATING);
-		mRecorder.setOnInfoListener(new OnInfoListener() {
-			
-			@Override
-			public void onInfo(MediaRecorder arg0, int what, int extra) {
-				switch (what) {
-				case MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED:
-					stopRecording();
-				}
-			}
-		});
-		mRecorder.setPreviewDisplay(preView.getHolder().getSurface());
-		mRecorder.prepare();
-		return true;
-	}
 
 	@Override
 	public void onClick(View source) {
@@ -137,8 +115,10 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 					Toast.makeText(RecordVideoActivity.this, "SD卡不存在，请插入SD卡！", Toast.LENGTH_LONG).show();
 					return;
 				}
-				prepareRecorder();
-				mRecorder.start();
+//				prepareRecorder();
+//				mRecorder.start();
+				
+				startmediaRecorder();
 				new Thread(progressTimer).start();
 				System.out.println("----Start Recording----");
 				startButton.setEnabled(false);
@@ -174,12 +154,14 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 	}
 
 	private void stopRecording() {
+		System.out.println("isRecording = " + isRecording);
 		if (isRecording) {
 			try {
-				mRecorder.stop();
-				c.stopPreview();
-				c.lock();
-				c.release();
+				stopmediaRecorder();
+//				mRecorder.stop();
+//				mCamera.stopPreview();
+//				mCamera.lock();
+//				mCamera.release();
 				startButton.setEnabled(true);
 				isRecording = false;
 				resetProgressbar();
@@ -189,8 +171,112 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	static class ProgressTimer implements Runnable {
+	protected void releaseCamera() {
+		if(mCamera!=null){
+			mCamera.stopPreview();
+			mCamera.release();
+			mCamera = null;
+		}
+	}
+	
+	protected void initpreview() {
+		mCamera = Camera.open(CameraInfo.CAMERA_FACING_BACK);
+		try {
+			mCamera.setPreviewDisplay(preView.getHolder());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		setCameraDisplayOrientation(this,CameraInfo.CAMERA_FACING_BACK,mCamera);
+		mCamera.startPreview();
+	}
+	
+	public static void setCameraDisplayOrientation(Activity activity,
+	         int cameraId, android.hardware.Camera camera) {
+	     android.hardware.Camera.CameraInfo info =
+	             new android.hardware.Camera.CameraInfo();
+	     android.hardware.Camera.getCameraInfo(cameraId, info);
+	     int rotation = activity.getWindowManager().getDefaultDisplay()
+	             .getRotation();
+	     int degrees = 0;
+	     switch (rotation) {
+	         case Surface.ROTATION_0: degrees = 0; break;
+	         case Surface.ROTATION_90: degrees = 90; break;
+	         case Surface.ROTATION_180: degrees = 180; break;
+	         case Surface.ROTATION_270: degrees = 270; break;
+	     }
+
+	     int result;
+	     if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+	         result = (info.orientation + degrees) % 360;
+	         result = (360 - result) % 360;  // compensate the mirror
+	     } else {  // back-facing
+	         result = (info.orientation - degrees + 360) % 360;
+	     }
+	     camera.setDisplayOrientation(result);
+	}
+	
+	private void stopmediaRecorder() {
+		if(mRecorder!=null){
+			if(isRecording){
+				mRecorder.stop();
+				mRecorder.reset();
+				mRecorder.release();
+				mRecorder=null;
+				isRecording = false;
+				try {
+					mCamera.reconnect();
+				} catch (IOException e) {
+					Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void startmediaRecorder() {
+		mCamera.unlock();
+		isRecording = true;
+		mRecorder = new MediaRecorder();
+		mRecorder.reset();
+		mRecorder.setCamera(mCamera);
+		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);//设置声音源
+		mRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);//设置视频源
+//		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+//		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+//		mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+//		mRecorder.setVideoSize(1024, 768);
+//		mRecorder.setOrientationHint(90);
+//		mRecorder.setVideoEncodingBitRate(5 * 1024 * 768);//每秒4帧
+		CamcorderProfile mCamcorderProfile = CamcorderProfile.get(CameraInfo.CAMERA_FACING_BACK, CamcorderProfile.QUALITY_HIGH);
+		mRecorder.setProfile(mCamcorderProfile);
+		String fileName = dateFormat.format(Calendar.getInstance().getTime()) + ".mp4";
+		String recordFile = recordDirPath + "/" + fileName;
+		mRecorder.setOutputFile(recordFile);
+		mRecorder.setPreviewDisplay(preView.getHolder().getSurface());
+		mRecorder.setMaxDuration(MAX_DURATING);
+		mRecorder.setOnInfoListener(new OnInfoListener() {
+			@Override
+			public void onInfo(MediaRecorder arg0, int what, int extra) {
+				switch (what) {
+				case MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED:
+					System.out.println("what = " +what);
+					stopRecording();
+				}
+			}
+		});
+		try {
+			mRecorder.prepare();
+		} catch (Exception e) {
+			isRecording = false;
+			Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+			mCamera.lock();
+		}
+		mRecorder.start();
 		
+	}
+	
+	static class ProgressTimer implements Runnable {
 		
 		private int maxTime;
 		private ProgressBar progressBar;
@@ -202,7 +288,7 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void run() {
-			int stap = maxTime / 10;
+			int stap = maxTime / 100;
 			try {
 				for (int i = 0; i < maxTime; i += stap) {
 					progressBar.setProgress(i + stap);
