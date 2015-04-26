@@ -94,7 +94,7 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 		});
 		startButton.setEnabled(true);
 		preView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		preView.getHolder().setFixedSize(800, 480);
+//		preView.getHolder().setFixedSize(800, 480);
 		preView.getHolder().setKeepScreenOn(true);
 		mRecorder = new MediaRecorder();
 		progressTimer = new ProgressTimer(MAX_DURATING, progressBar);
