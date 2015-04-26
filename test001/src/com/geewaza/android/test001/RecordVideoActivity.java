@@ -245,10 +245,10 @@ public class RecordVideoActivity extends Activity implements OnClickListener {
 //		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 //		mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 //		mRecorder.setVideoSize(1024, 768);
-//		mRecorder.setOrientationHint(90);
 //		mRecorder.setVideoEncodingBitRate(5 * 1024 * 768);//每秒4帧
 		CamcorderProfile mCamcorderProfile = CamcorderProfile.get(CameraInfo.CAMERA_FACING_BACK, CamcorderProfile.QUALITY_HIGH);
 		mRecorder.setProfile(mCamcorderProfile);
+		mRecorder.setOrientationHint(90);
 		String fileName = dateFormat.format(Calendar.getInstance().getTime()) + ".mp4";
 		String recordFile = recordDirPath + "/" + fileName;
 		mRecorder.setOutputFile(recordFile);
